@@ -1,22 +1,27 @@
 # Controle de Mini Foguete com Sistema de Recuperação e Obtenção de Dados
 
-Este projeto tem como objetivo controlar um mini foguete durante seu vôo, ejetando um paraquedas para sua recuperação e obtendo dados de pressão, temperatura e altitude durante todo o processo. O sistema utiliza um sensor MPU6050 para identificar o lançamento do foguete e controlar a ejeção do paraquedas por meio de um micro servo motor de rotação contínua. Além disso, um sensor BMP180 é utilizado para obtenção dos dados de pressão, temperatura e altitude, que são gravados em um cartão SD para posterior análise.
+# Controle de Voo de Foguete
 
-## Diagrama de Conexão
+Este é um projeto de controle de voo de foguete que usa uma placa ESP32, sensores BMP180 e MPU6050 e um servo motor de rotação contínua para acionar um paraquedas. O sistema de controle tem duas funções principais: recuperação por meio da injeção de um paraquedas e aquisição de dados salvando dados de sensores em arquivo CSV dentro de um cartão SD em função do tempo de operação em milissegundos.
 
-O diagrama de conexão abaixo representa como os componentes devem ser conectados ao microcontrolador:
+O código está escrito em C++ e pode ser compilado usando a IDE do Arduino. O código é bem documentado, modularizado e orientado a objetos.
+
+## Montagem do Circuito
+
+Para montar o circuito, siga o esquema abaixo:
 
 ```
- MPU6050      BMP180       Servo Motor      SD Card
-+--------+   +--------+   +-----------+   +--------+
-|        |   |        |   |           |   |        |
-| SDA    +---+ SDA    |   |           |   | MOSI   |
-|        |   |        +---+ Control   +---+        |
-| SCL    +---+ SCL    |   |           |   | SCK    |
-|        |   |        |   |           |   |        |
-+--------+   +--------+   +-----------+   +--------+
+ESP32    BMP180    MPU6050    Micro Servo
+-------------------------------------------
+3V3      VCC       VCC        VCC
+GND      GND       GND        GND
+D21/SCL  SCL
+D22/SDA  SDA
+D18              SCL
+D19              SDA
+          AD0       AD0
+                     PWM
 ```
-
 
 ## Requisitos
 
@@ -30,14 +35,16 @@ Para a realização deste projeto, você vai precisar dos seguintes componentes:
 
 ## Instalação
 
-1. Clone este repositório em sua máquina local.
-2. Abra o arquivo `controle_foguete.ino` no Arduino IDE.
-3. Instale as bibliotecas necessárias (MPU6050, BMP180, Servo, SD) utilizando o gerenciador de bibliotecas da Arduino IDE.
-4. Conecte os componentes de acordo com o diagrama de conexão.
-5. Compile e envie o código para o microcontrolador.
+Para instalar o código na placa ESP32, siga estes passos:
+
+1. Baixe e instale a IDE do Arduino.
+2. Abra a IDE do Arduino e vá em "File" -> "Preferences". Na seção "Additional Boards Manager URLs", adicione o seguinte URL: `https://dl.espressif.com/dl/package_esp32_index.json`.
+3. Vá em "Tools" -> "Board" -> "Boards Manager". Pesquise por "esp32" e instale o pacote.
+4. Selecione a placa "ESP32 Dev Module" em "Tools" -> "Board".
+5. Conecte a placa ESP32 ao computador usando um cabo USB.
+6. Abra o arquivo "rocket-flight-control.ino" na IDE do Arduino.
+7. Clique em "Upload" para enviar o código para a placa ESP32.
 
 ## Uso
 
-1. Alimente o microcontrolador com uma fonte de alimentação adequada.
-2. Lance o foguete para iniciar a obtenção dos dados.
-3. Aguarde o fim do vôo para coletar o cartão microSD e realizar a análise dos dados obtidos.
+Ao ligar a placa ESP32, ela começará a coletar dados dos sensores e salvará esses dados em um arquivo CSV no cartão SD. Quando a altitude for inferior a 50 metros, o paraquedas será acionado.
