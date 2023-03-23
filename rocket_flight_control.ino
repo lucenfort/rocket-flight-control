@@ -1,5 +1,5 @@
 /*
-
+projeto: minifoguete de 50 m (adaptável)
 */
 
 #include <Wire.h>
